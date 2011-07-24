@@ -1,0 +1,12 @@
+name: mPasswordProtector
+main: com.mdev.bukkit.mpasswordprotector.mPasswordProtector
+version: 0.0.1a
+
+
+commands:
+    login:
+        description: Login with the server password to get movement rights
+        usage: /login <password>
+    setpwd:
+        description: Sets the server password (OPs only!)
+        usage: /setpwd <old password> <new password>
