@@ -22,10 +22,12 @@ public class mppPlayerListener extends PlayerListener {
         Player player = event.getPlayer();
         
         // TODO add specified location for unauthorized players but for first testings this will do it 
-                
-        plugin.unauthorisedPlayers.add(player);
-        sendPwdReqMsg(player);
-        
+        if(!plugin.whitelistPlayerNames.contains(player.getDisplayName())) {    
+        	plugin.unauthorisedPlayers.add(player);
+        	sendPwdReqMsg(player);
+        } else {
+        	player.sendMessage(ChatColor.GREEN + "Lucky you! You are on the whitelist!");
+        }
     }
     
     @Override

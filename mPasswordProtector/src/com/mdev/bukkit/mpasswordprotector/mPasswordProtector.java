@@ -26,10 +26,12 @@ public class mPasswordProtector extends JavaPlugin {
     
     // config related
     static String mainDirectory = "plugins/mPasswordProtector"; 
-	static File pwd = new File(mainDirectory + File.separator + "protector.dat"); 
+	static File configfile = new File(mainDirectory + File.separator + "protector.dat"); 
 	static Properties prop = new Properties(); 
 
     public ArrayList<Player> unauthorisedPlayers = new ArrayList<Player>();
+    public ArrayList<String> whitelistPlayerNames;// = new ArrayList<String>();
+    
     static String password;
     
     public void onDisable() {
@@ -38,24 +40,7 @@ public class mPasswordProtector extends JavaPlugin {
     }
 
     public void onEnable() {     	    	
-    	new File(mainDirectory).mkdir(); //makes the Zones directory/folder in the plugins directory
-    	 
-		if(!pwd.exists()){ 
-			try { 
-				pwd.createNewFile(); 
-				FileOutputStream out = new FileOutputStream(pwd); 
-				prop.put("password", "asdfasdf"); // 
-				prop.store(out, "Do NEVER edit this config!"); 
-				out.flush();  
-				out.close(); 
-			} catch (IOException ex) { 
-				ex.printStackTrace(); 
-			}
-		} 
-		
-		if(!loadPassword()){
-			System.out.println( "[mPasswordProtector] could not load password!!" );
-		} 
+    	loadConfig();
     	
         // Register our events
         PluginManager pm = getServer().getPluginManager();
@@ -74,21 +59,92 @@ public class mPasswordProtector extends JavaPlugin {
         // Register our commands
         getCommand("login").setExecutor(new LoginCommand(this));
         getCommand("setpwd").setExecutor(new SetPwdCommand(this));
+        getCommand("whitelist").setExecutor(new WhitelistCommand(this));
         
         PluginDescriptionFile pdfFile = this.getDescription();  
         System.out.println( "[mPasswordProtector] " + " v" + pdfFile.getVersion() + " enabled!" );
     }
 
-    public String getPwd(){
+    private void loadConfig() {
+    	new File(mainDirectory).mkdir(); //makes the Zones directory/folder in the plugins directory
+   	 
+		if(!configfile.exists()){ 
+			try { 
+				configfile.createNewFile(); 
+				FileOutputStream out = new FileOutputStream(configfile); 
+				prop.put("password", "asdfasdf");
+				prop.put("whitelist", "");
+				prop.store(out, "Do NEVER edit this config!"); 
+				out.flush();  
+				out.close(); 
+			} catch (IOException ex) { 
+				ex.printStackTrace(); 
+			}
+		} 
+		
+		if(!loadPassword()){
+			System.out.println( "[mPasswordProtector] could not load password!!" );
+		} 
+		
+		if(!loadWhitelist()){
+			System.out.println( "[mPasswordProtector] could not load whitelist!!" );
+		} 
+		
+	}
+
+	private boolean loadWhitelist() {
+		FileInputStream in;
+		String wl;
+		this.whitelistPlayerNames = new ArrayList<String>();
+		
+		try {
+			in = new FileInputStream(configfile);
+			prop.load(in);
+	    	wl = prop.getProperty("whitelist");
+	    	in.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} 	   
+		
+		for (String name : wl.split(";")){
+			whitelistPlayerNames.add(name);
+		}
+		
+    	return true;
+	}
+	
+	public boolean setWhitelist() {
+		String wl = "";
+		
+		for(String name : this.whitelistPlayerNames){
+			wl += name + ";";
+		}
+		
+		try {  
+			FileOutputStream out = new FileOutputStream(configfile); 
+			prop.setProperty("whitelist", wl); 
+			prop.store(out, "Do NEVER edit this config!");
+			out.flush();  
+			out.close(); 
+		} catch (IOException ex) { 
+			ex.printStackTrace(); 
+			return false;
+		}
+		
+		loadWhitelist();
+    	return true;
+	}
+
+	public String getPwd(){
     	// TODO Read password from encrypted file
-    	System.out.println( "[mPasswordProtector] debug -- password= " + password );
     	return password;
     }
     
     boolean loadPassword(){    	
     	FileInputStream in;
 		try {
-			in = new FileInputStream(pwd);
+			in = new FileInputStream(configfile);
 			prop.load(in);
 	    	password = prop.getProperty("password");
 	    	in.close();
@@ -102,7 +158,7 @@ public class mPasswordProtector extends JavaPlugin {
     
     boolean setPassword(String pw){
     	try {  
-			FileOutputStream out = new FileOutputStream(pwd); 
+			FileOutputStream out = new FileOutputStream(configfile); 
 			prop.setProperty("password", pw); // TODO replace with crypt password method
 			prop.store(out, "Do NEVER edit this config!");
 			out.flush();  

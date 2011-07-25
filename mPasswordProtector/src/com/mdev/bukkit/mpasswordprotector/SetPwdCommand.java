@@ -39,5 +39,4 @@ private final mPasswordProtector plugin;
 		
 		return false;
 	}
-
 }

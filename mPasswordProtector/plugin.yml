@@ -1,6 +1,6 @@
 name: mPasswordProtector
 main: com.mdev.bukkit.mpasswordprotector.mPasswordProtector
-version: 0.0.1a
+version: 0.0.2b
 
 
 commands:
@@ -10,3 +10,6 @@ commands:
     setpwd:
         description: Sets the server password (OPs only!)
         usage: /setpwd <old password> <new password>
+    whitelist:
+        description: Add or remove a player from whitelist (OPs only!)
+        usage: /whitelist <add/del/list> <username case sensitive>
