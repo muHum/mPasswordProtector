@@ -23,7 +23,7 @@ public class LoginCommand implements CommandExecutor {
 		if(sender instanceof Player){
 			if(cmd.getName().equals("login")){
 				Player player = (Player) sender;		        
-		        if(plugin.unauthorisedPlayers.contains(player)) { 
+		        if(plugin.unauthorisedPlayers.containsKey(player)) { 
 			        String password = args[0];
 	
 	                if (password.equals(plugin.getPwd())) {
@@ -32,7 +32,25 @@ public class LoginCommand implements CommandExecutor {
 	                    
 	                    return true;
 	                } else {
-	                    player.sendMessage(ChatColor.RED + "Server password incorrect, now fuck off!");
+	                	int old = plugin.unauthorisedPlayers.get(player);
+	                	String kb = plugin.getConfig().getProperty("kickorban").toString();
+	                	
+	                	int kob = (Integer.parseInt(plugin.getConfig().getProperty("kobafter").toString()) - old);
+	                	
+	                	if(kob > 0){
+	                		player.sendMessage(ChatColor.RED + "Server password incorrect! " + kob + " attempts left...");
+	                		old++;
+	                		plugin.unauthorisedPlayers.put(player, old);
+	                	} else if(kob <= 0) {
+	                		if(kb.equals("k")){
+	                			player.sendMessage(ChatColor.RED + "Server password incorrect! You're will be kicked by now...");
+	                			player.kickPlayer("Too many wrong attempts...");
+	                		} else if(kb.equals("b")){
+	                			player.sendMessage(ChatColor.RED + "Server password incorrect! You're will be banned by now...");
+	                			player.kickPlayer("And banned..."); //TODO write player into ban.txt
+	                		}
+	                	}                	
+	                	
 	                    return true;
 	                }		             
 		        } else {

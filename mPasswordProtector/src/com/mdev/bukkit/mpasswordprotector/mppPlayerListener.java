@@ -23,7 +23,7 @@ public class mppPlayerListener extends PlayerListener {
         
         // TODO add specified location for unauthorized players but for first testings this will do it 
         if(!plugin.whitelistPlayerNames.contains(player.getDisplayName())) {    
-        	plugin.unauthorisedPlayers.add(player);
+        	plugin.unauthorisedPlayers.put(player, 0);
         	sendPwdReqMsg(player);
         } else {
         	player.sendMessage(ChatColor.GREEN + "Lucky you! You are on the whitelist!");
@@ -36,8 +36,14 @@ public class mppPlayerListener extends PlayerListener {
             return;
         }
         
+        String k = plugin.getConfig().getProperty("allowMovement").toString();
+        
+        if (k.equalsIgnoreCase("true")) {
+            return;
+        }
+        
         Player player = event.getPlayer();
-        if (plugin.unauthorisedPlayers.contains(player)) {
+        if (plugin.unauthorisedPlayers.containsKey(player)) {
                 event.setCancelled(true);
         }
     }
@@ -49,7 +55,7 @@ public class mppPlayerListener extends PlayerListener {
         }
 
         Player player = event.getPlayer();
-        if (plugin.unauthorisedPlayers.contains(player)) {
+        if (plugin.unauthorisedPlayers.containsKey(player)) {
             event.setCancelled(true);
         }
     }
@@ -61,7 +67,7 @@ public class mppPlayerListener extends PlayerListener {
         }
 
         Player player = event.getPlayer();
-        if (plugin.unauthorisedPlayers.contains(player)) {
+        if (plugin.unauthorisedPlayers.containsKey(player)) {
             event.setCancelled(true);
         }
     }
@@ -71,7 +77,7 @@ public class mppPlayerListener extends PlayerListener {
     	Player player = event.getPlayer();
         String message = event.getMessage();
         
-        if (plugin.unauthorisedPlayers.contains(player) && !message.startsWith("/login")) {
+        if (plugin.unauthorisedPlayers.containsKey(player) && !message.startsWith("/login")) {
             sendPwdReqMsg(player);            
             event.setCancelled(true);       
         }

@@ -23,7 +23,7 @@ public class mppBlockListener extends BlockListener {
             return;        
         
         Player player = event.getPlayer();
-        if (plugin.unauthorisedPlayers.contains(player)) {
+        if (plugin.unauthorisedPlayers.containsKey(player)) {
             event.setBuild(false);
             event.setCancelled(true);
         }
@@ -35,7 +35,7 @@ public class mppBlockListener extends BlockListener {
             return;        
 
         Player player = event.getPlayer();
-        if (plugin.unauthorisedPlayers.contains(player)) {
+        if (plugin.unauthorisedPlayers.containsKey(player)) {
             event.setCancelled(true);
         }
     }
