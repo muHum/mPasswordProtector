@@ -27,7 +27,7 @@ public class LoginCommand implements CommandExecutor {
 			        String password = args[0];
 	
 	                if (password.equals(plugin.getPwd())) {
-	                    player.sendMessage(ChatColor.GREEN + "Server password accepted, you're now allowed to play");
+	                    player.sendMessage(ChatColor.GREEN + "Password accepted");
 	                    plugin.unauthorisedPlayers.remove(player);
 	                    
 	                    return true;
@@ -38,16 +38,16 @@ public class LoginCommand implements CommandExecutor {
 	                	int kob = (Integer.parseInt(plugin.getConfig().getProperty("kobafter").toString()) - old);
 	                	
 	                	if(kob > 0){
-	                		player.sendMessage(ChatColor.RED + "Server password incorrect! " + kob + " attempts left...");
+	                		player.sendMessage(ChatColor.RED + "Password incorrect " + kob + " attempts left...");
 	                		old++;
 	                		plugin.unauthorisedPlayers.put(player, old);
 	                	} else if(kob <= 0) {
 	                		if(kb.equals("k")){
-	                			player.sendMessage(ChatColor.RED + "Server password incorrect! You're will be kicked by now...");
+	                			player.sendMessage(ChatColor.RED + "Password incorrect.");
 	                			player.kickPlayer("Too many wrong attempts...");
 	                		} else if(kb.equals("b")){
-	                			player.sendMessage(ChatColor.RED + "Server password incorrect! You're will be banned by now...");
-	                			player.kickPlayer("And banned..."); //TODO write player into ban.txt
+	                			player.sendMessage(ChatColor.RED + "Password incorrect.");
+	                			player.kickPlayer("Banned..."); //TODO write player into ban.txt
 	                		}
 	                	}                	
 	                	
