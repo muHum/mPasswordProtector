@@ -26,7 +26,7 @@ public class mppPlayerListener extends PlayerListener {
         	plugin.unauthorisedPlayers.put(player, 0);
         	sendPwdReqMsg(player);
         } else {
-        	player.sendMessage(ChatColor.GREEN + "Lucky you! You are on the whitelist!");
+        	player.sendMessage(ChatColor.GREEN + "You're on the whitelist.");
         }
     }
     
@@ -84,7 +84,6 @@ public class mppPlayerListener extends PlayerListener {
     }
     
     public void sendPwdReqMsg(Player player) {
-        player.sendMessage(ChatColor.YELLOW + "This server is protected by " + ChatColor.DARK_RED + "mPasswordProtector");
         player.sendMessage(ChatColor.YELLOW + "Login with " + ChatColor.GREEN + "/login " + ChatColor.RED + " <password>" + ChatColor.YELLOW + " to play");
     }
 }

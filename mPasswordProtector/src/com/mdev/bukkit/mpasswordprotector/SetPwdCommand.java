@@ -29,11 +29,11 @@ private final mPasswordProtector plugin;
 					return true;
 				}
 			} else {
-				sender.sendMessage(ChatColor.RED + "Wrong password, bastard! " + args[0] + " " + args[1]);
+				sender.sendMessage(ChatColor.RED + "Wrong password. " + args[0] + " " + args[1]);
 				return true;
 			}
 		} else if(sender instanceof Player){
-			sender.sendMessage(ChatColor.RED + "Buhh... Only for OPs, bastard!");
+			sender.sendMessage(ChatColor.RED + "Only for OPs.");
 			return true;
 		}
 		

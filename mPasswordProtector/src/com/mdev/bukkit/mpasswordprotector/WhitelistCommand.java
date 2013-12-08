@@ -51,7 +51,7 @@ private final mPasswordProtector plugin;
 				return true;
 			}
 		} else if(sender instanceof Player){
-			sender.sendMessage(ChatColor.RED + "Buhh... Only for OPs!");
+			sender.sendMessage(ChatColor.RED + "Only for OPs.");
 			return true;
 		}
 		
